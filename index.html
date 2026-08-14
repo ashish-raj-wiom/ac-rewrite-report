@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Location is Far PRD · §7 Acceptance Criteria — rewrite for review</title>
+<style>
+  :root{color-scheme:light;
+    --plane:#f5f5f2;--surface:#fffffe;--raise:#fbfbf9;--ink:#16171c;--ink2:#4c4d54;--muted:#84858c;
+    --line:#e5e4de;--hair:rgba(20,21,26,.09);--sys:#4f46e5;--sys-ink:#4338ca;--sys-wash:rgba(79,70,229,.07);
+    --bad:#c4433f;--bad-wash:rgba(196,67,63,.08);--good:#0f8a5f;--good-wash:rgba(15,138,95,.09);
+    --amber:#b25e00;--amber-wash:rgba(224,140,20,.12);--tile:rgba(20,21,26,.06)}
+  @media(prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){color-scheme:dark;
+    --plane:#0e0f11;--surface:#191a1d;--raise:#202124;--ink:#f1f2f3;--ink2:#bcc0c6;--muted:#8a9097;
+    --line:#2b2c2f;--hair:rgba(255,255,255,.10);--sys:#8b83f0;--sys-ink:#a79ff5;--sys-wash:rgba(120,110,235,.13);
+    --bad:#e5706c;--bad-wash:rgba(196,67,63,.16);--good:#33b184;--good-wash:rgba(15,138,95,.15);
+    --amber:#f0b055;--amber-wash:rgba(224,140,20,.16);--tile:rgba(255,255,255,.07)}}
+  :root[data-theme="dark"]{color-scheme:dark;
+    --plane:#0e0f11;--surface:#191a1d;--raise:#202124;--ink:#f1f2f3;--ink2:#bcc0c6;--muted:#8a9097;
+    --line:#2b2c2f;--hair:rgba(255,255,255,.10);--sys:#8b83f0;--sys-ink:#a79ff5;--sys-wash:rgba(120,110,235,.13);
+    --bad:#e5706c;--bad-wash:rgba(196,67,63,.16);--good:#33b184;--good-wash:rgba(15,138,95,.15);
+    --amber:#f0b055;--amber-wash:rgba(224,140,20,.16);--tile:rgba(255,255,255,.07)}
+  *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+  body{background:var(--plane);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+  a{color:var(--sys-ink)}
+  .theme-toggle{position:fixed;top:14px;right:14px;z-index:20;border:1px solid var(--hair);background:var(--surface);color:var(--ink2);width:36px;height:36px;border-radius:9px;cursor:pointer;font-size:15px}
+  header.hero{background:radial-gradient(1000px 340px at 85% -10%,var(--sys-wash),transparent 60%);border-bottom:1px solid var(--line);padding:56px 0 34px}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--sys-ink)}
+  h1{font-size:clamp(26px,4vw,38px);font-weight:770;letter-spacing:-.02em;line-height:1.08;margin:14px 0 12px;text-wrap:balance}
+  .lede{font-size:16.5px;color:var(--ink2);max-width:78ch}
+  .lede b{color:var(--ink);font-weight:640}
+  .meta{display:flex;flex-wrap:wrap;gap:7px 22px;margin-top:18px;font-size:12.5px;color:var(--muted)}
+  .meta b{color:var(--ink2)}
+  section{padding:40px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:22px;font-weight:720;letter-spacing:-.01em;margin-bottom:6px}
+  .sub{color:var(--ink2);font-size:15px;margin-bottom:20px;max-width:80ch}
+  h3{font-size:15px;font-weight:700;margin:2px 0}
+  /* method chips */
+  .axes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+  @media(max-width:720px){.axes{grid-template-columns:1fr}}
+  .axis{background:var(--surface);border:1px solid var(--tile);border-radius:12px;padding:15px 17px}
+  .axis h4{font-size:13.5px;color:var(--ink);margin-bottom:4px}
+  .axis p{font-size:13.3px;color:var(--ink2)}
+  .rules{list-style:none;margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:9px 20px}
+  @media(max-width:720px){.rules{grid-template-columns:1fr}}
+  .rules li{font-size:13.4px;color:var(--ink2);padding-left:22px;position:relative}
+  .rules li::before{content:"→";position:absolute;left:0;color:var(--sys-ink);font-weight:700}
+  .rules li b{color:var(--ink)}
+  /* scorecard */
+  .twrap{overflow-x:auto;border:1px solid var(--tile);border-radius:12px;background:var(--surface)}
+  table{border-collapse:collapse;width:100%;font-size:13.3px}
+  th{text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:10px 14px;border-bottom:1px solid var(--line);color:var(--ink2);vertical-align:top}
+  tr:last-child td{border-bottom:none}td b{color:var(--ink)}
+  .tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap}
+  .t-bad{background:var(--bad-wash);color:var(--bad)} .t-good{background:var(--good-wash);color:var(--good)}
+  .t-warn{background:var(--amber-wash);color:var(--amber)} .t-nn{background:var(--tile);color:var(--muted)}
+  .num{text-align:center;font-variant-numeric:tabular-nums}
+  /* comparison cards */
+  .cmp{background:var(--surface);border:1px solid var(--tile);border-radius:14px;padding:0;margin-bottom:20px;overflow:hidden}
+  .cmp-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:15px 18px;border-bottom:1px solid var(--line);background:var(--raise)}
+  .cmp-head .id{font-size:15px;font-weight:750;color:var(--ink);font-family:ui-monospace,Consolas,monospace}
+  .cmp-head .flaw{font-size:12.5px;color:var(--ink2)}
+  .cmp-head .n{margin-left:auto;font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap}
+  .cmp-body{display:grid;grid-template-columns:1fr 1fr;gap:0}
+  @media(max-width:860px){.cmp-body{grid-template-columns:1fr}}
+  .col{padding:16px 18px}
+  .col.before{border-right:1px solid var(--line)}
+  @media(max-width:860px){.col.before{border-right:none;border-bottom:1px solid var(--line)}}
+  .lbl{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:9px;display:flex;align-items:center;gap:7px}
+  .lbl.b{color:var(--bad)} .lbl.a{color:var(--good)}
+  .lbl .dot{width:7px;height:7px;border-radius:50%}
+  .lbl.b .dot{background:var(--bad)} .lbl.a .dot{background:var(--good)}
+  .ac{font-size:13.3px;color:var(--ink2);line-height:1.5;border-left:2px solid var(--bad);background:var(--bad-wash);border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:8px}
+  .col.after .ac{border-left-color:var(--good);background:var(--good-wash)}
+  .ac .acid{font-weight:700;color:var(--ink);font-family:ui-monospace,Consolas,monospace;font-size:12px}
+  .ac em{color:var(--sys-ink);font-style:normal;font-weight:600}
+  .clar{color:var(--amber);font-weight:600}
+  .why{margin-top:12px;padding:13px 15px;background:var(--sys-wash);border:1px solid var(--hair);border-radius:10px}
+  .why h5{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--sys-ink);margin-bottom:7px}
+  .why ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+  .why li{font-size:13px;color:var(--ink2);padding-left:19px;position:relative}
+  .why li::before{content:"✓";position:absolute;left:0;color:var(--good);font-weight:800}
+  .why li b{color:var(--ink)}
+  .pill{display:inline-block;font-size:10px;font-weight:700;padding:1px 8px;border-radius:20px;background:var(--tile);color:var(--muted);margin-left:6px}
+  .qbox{background:var(--surface);border:1px solid var(--tile);border-left:3px solid var(--amber);border-radius:0 12px 12px 0;padding:16px 18px}
+  .qbox ol{margin:6px 0 0 20px;font-size:14px;color:var(--ink2)}
+  .qbox ol li{margin:7px 0}
+  .qbox b{color:var(--ink)}
+  footer{padding:28px 0 60px;color:var(--muted);font-size:12.5px}
+  .note{font-size:13px;color:var(--ink2);background:var(--amber-wash);border:1px solid var(--hair);border-radius:10px;padding:12px 15px;margin-top:14px}
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="tg" aria-label="Toggle theme">◑</button>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Decline due to Location is Far · CSP Assist &amp; Capture — §7 rewrite</span>
+    <h1>Acceptance criteria: before &amp; after</h1>
+    <p class="lede">The 11 acceptance criteria from the signed-off PRD, rewritten against two independent review passes. Each old AC is shown beside its replacement, with <b>what changed and why it's better</b>. Format is unchanged — same §7 shape, same ID system; bundled ACs are split into atomic ones, and every outcome is bound to an <b>observable domain fact</b>, never an implementation detail.</p>
+    <div class="meta">
+      <span><b>Scope:</b> §7 only — an evaluation, not a PRD change</span>
+      <span><b>Status:</b> proposal for a v1.1 amendment</span>
+      <span><b>Not applied:</b> the PRD MD/HTML are untouched</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="method">
+  <div class="wrap">
+    <h2>The two axes, and the one rule</h2>
+    <p class="sub">Every AC was scored on two things only, then rewritten to pass both.</p>
+    <div class="axes">
+      <div class="axis"><h4>Correct</h4><p>Faithful to the PRD's own rules and internally consistent — the <em>When</em> must match the canon (§3a / §3b), and the <em>Given</em> must not presuppose the outcome.</p></div>
+      <div class="axis"><h4>Testable</h4><p>Two people who've never met mark it pass/fail identically, using domain nouns only — no "recorded", "deliberate", "as before".</p></div>
+    </div>
+    <ul class="rules">
+      <li><b>One AC = one independently-breakable claim.</b> A partial pass must be reportable, so bundles split along failure domains.</li>
+      <li><b>Every <em>Then</em> is an observable domain fact</b> — a state of an entity you already own (booking, allocation, signal, points, timer, standing). No schema, no tables.</li>
+      <li><b>Define by consequence, not label.</b> "Deliberate" isn't a flag — it's "carries the shown points and emits a signal".</li>
+      <li><b>Unknowns are marked, not guessed.</b> <span class="clar">[CLARIFY]</span> flags a ruling you owe, not a defect invented by the writer.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="scorecard">
+  <div class="wrap">
+    <h2>Scorecard — the 11, at a glance</h2>
+    <p class="sub">Verdicts are from the two review passes. "New" is how many atomic ACs replace it — the count is a readout of how bundled the original was, not a target. Only the two truly bundled ACs (CONF-1, BACK-1) multiply; the rest stay 1:1 and are just tightened.</p>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>AC</th><th>Old verdict</th><th>Core problem</th><th class="num">→ New</th></tr></thead>
+        <tbody>
+          <tr><td><b>AC-CONF-1</b></td><td><span class="tag t-warn">needs work</span></td><td>Bundles record + UI + emission; "deliberate" has no observable</td><td class="num">3</td></tr>
+          <tr><td><b>AC-CONF-2</b></td><td><span class="tag t-good">best-formed</span></td><td>Right shape, but the <em>Given</em> never forces the discriminating (subset) case</td><td class="num">1</td></tr>
+          <tr><td><b>AC-BACK-1</b></td><td><span class="tag t-bad">not testable</span></td><td>Four claims, three systems, one row; 3 of 4 name no observable</td><td class="num">4 (+1)</td></tr>
+          <tr><td><b>AC-STR-1</b></td><td><span class="tag t-bad">correctness bug</span></td><td>"When he confirms" — but T3 has no confirm step</td><td class="num">1</td></tr>
+          <tr><td><b>AC-WF-1</b></td><td><span class="tag t-bad">reject</span></td><td>"the only differences are…" = a full record-diff vs an undefined schema</td><td class="num">1</td></tr>
+          <tr><td><b>AC-WF-2</b></td><td><span class="tag t-warn">needs work</span></td><td>"handed back for re-routing" names no observable</td><td class="num">1</td></tr>
+          <tr><td><b>AC-GRD-1</b></td><td><span class="tag t-bad">reject — not an AC</span></td><td>Architectural boundary restated; trigger ("reaches Genie") is outside control; universal negative</td><td class="num">1</td></tr>
+          <tr><td><b>AC-FAIL-1</b></td><td><span class="tag t-warn">needs work</span></td><td>Correct, but "in time" / "spinning" have no number</td><td class="num">1</td></tr>
+          <tr><td><b>AC-REG-1</b></td><td><span class="tag t-warn">needs work</span></td><td>"Given this feature ships" is a release note; "behave as before" is a regression suite</td><td class="num">1</td></tr>
+          <tr><td><b>AC-RACE-1</b></td><td><span class="tag t-good">pass</span></td><td>Well-shaped; blocked only by the undefined timeout number</td><td class="num">1</td></tr>
+          <tr><td><b>AC-DUP-1</b></td><td><span class="tag t-warn">pass, fix Given</span></td><td>Given presupposes the outcome ("already recorded")</td><td class="num">1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note"><b>Net:</b> 11 → ~17 ACs. The growth is entirely the two bundled ACs unpacking; nine stay one row. Two shippable now, the rest carry an explicit <span class="clar">[CLARIFY]</span> until you rule.</div>
+  </div>
+</section>
+
+<section id="compare">
+  <div class="wrap">
+    <h2>Before → after, one at a time</h2>
+    <p class="sub">Left = the signed-off AC. Right = the replacement(s). Below each, the specific moves and why they make it verifiable.</p>
+
+    <!-- CONF-1 -->
+    <div class="cmp">
+      <div class="cmp-head"><span class="id">AC-CONF-1</span><span class="flaw">Confirm "I won't be able to connect" (T1)</span><span class="n">1 → 3</span></div>
+      <div class="cmp-body">
+        <div class="col before">
+          <div class="lbl b"><span class="dot"></span>Before</div>
+          <div class="ac"><b>Given</b> a CSP shown 3 of his active connections, <b>When</b> he taps "I won't be able to connect", <b>Then</b> the decline is <em style="color:var(--bad)">recorded as deliberate</em>, the booking is removed + confirmation (S4), <em style="color:var(--bad)">and</em> a signal is pushed carrying the ids + 3 points in order.</div>
+        </div>
+        <div class="col after">
+          <div class="lbl a"><span class="dot"></span>After</div>
+          <div class="ac"><span class="acid">CONF-1a</span> — <b>Then</b> the booking is removed from him and a decline for this (booking, CSP) is <em>registered carrying the 3 points he was shown, in order</em>, as the points he rejects.</div>
+          <div class="ac"><span class="acid">CONF-1b</span> — <b>Then</b> he sees the S4 confirmation showing the booking was removed and his reason.</div>
+          <div class="ac"><span class="acid">CONF-1c</span> — <b>Then</b> a signal is emitted to Genie for this booking carrying <em>{connection id, customer id, CSP, capture point = decline, reason, the 3 points in order}</em>.</div>
+        </div>
+      </div>
+      <div class="why"><h5>Why it's better</h5><ul>
+        <li><b>"Deliberate" is gone</b> — replaced by its two observable consequences (carries the shown points + emits a signal), the exact things that distinguish T1 from T3. No hidden flag to guess at.</li>
+        <li><b>Split by system</b> — allocation record (1a), CSP-facing UI (1b), outbound emission (1c). A missing S4 no longer fails the emission check.</li>
+        <li>Every <em>Then</em> is a domain fact; no table or schema named.</li>
+      </ul></div>
+    </div>
+
+    <!-- CONF-2 -->
+    <div class="cmp">
+      <div class="cmp-head"><span class="id">AC-CONF-2</span><span class="flaw">Only shown points are sent (G1 invariant)</span><span class="n">tightened</span></div>
+      <div class="cmp-body">
+        <div class="col before">
+          <div class="lbl b"><span class="dot"></span>Before</div>
+          <div class="ac"><b>Given</b> the same confirm, <b>When</b> the signal is emitted, <b>Then</b> it names only the points that were shown — <em style="color:var(--bad)">no point the CSP was not shown</em> ever appears.</div>
+        </div>
+        <div class="col after">
+          <div class="lbl a"><span class="dot"></span>After</div>
+          <div class="ac"><span class="acid">CONF-2</span> — <b>Given</b> the intercept showed <em>3 points while Genie's response contained 5</em>, <b>When</b> he confirms, <b>Then</b> the signal carries <em>exactly those 3 shown points and none of the 2 that were not shown</em>.</div>
+        </div>
+      </div>
+      <div class="why"><h5>Why it's better</h5><ul>
+        <li><b>The test can now fail.</b> Old <em>Given</em> (shown = all Genie returned) can't distinguish a correct signal from a leaky one. Forcing shown ⊂ returned makes the zero-tolerance G1 invariant actually provable.</li>
+        <li>Already the best-formed AC — this only sharpens the precondition; nothing else changes.</li>
+      </ul></div>
+    </div>
+
+    <!-- BACK-1 -->
+    <div class="cmp">
+      <div class="cmp-head"><span class="id">AC-BACK-1</span><span class="flaw">Back-off "OK, I'll connect" (T2)</span><span class="n">1 → 4 (+1)</span></div>
+      <div class="cmp-body">
+        <div class="col before">
+          <div class="lbl b"><span class="dot"></span>Before</div>
+          <div class="ac"><b>Given</b> a CSP shown his nearby connections, <b>When</b> he taps "OK, I'll connect", <b>Then</b> <em style="color:var(--bad)">no decline is recorded</em> and no signal is sent, the <em style="color:var(--bad)">booking stays with him</em>, and the back-off event is <em style="color:var(--bad)">captured for measurement</em>.</div>
+        </div>
+        <div class="col after">
+          <div class="lbl a"><span class="dot"></span>After <span class="pill">shared Given: booking pre-acceptance · Genie returns 3 · intercept showing them · decline not yet sent <span class="clar">[Q1]</span></span></div>
+          <div class="ac"><span class="acid">BACK-1a</span> — <b>Then</b> the booking <em>remains assigned to the same CSP</em>, and <em>nothing that would exclude him, cool him down, or count against his standing</em> has been applied.</div>
+          <div class="ac"><span class="acid">BACK-1b</span> — <b>Then</b> no signal is emitted to Genie <span class="clar">[Q2: and, if in scope, no decline-pattern to Quality OS / Enforcement OS]</span>.</div>
+          <div class="ac"><span class="acid">BACK-1c</span> — <b>Then</b> the booking is present and actionable in his feed, and the acceptance window is <span class="clar">[Q3: unchanged / paused]</span>.</div>
+          <div class="ac"><span class="acid">BACK-1d</span> — <b>Then</b> the system can answer that the intercept was shown and he reconsidered — <em>exactly one</em> such outcome, <em>correlatable</em> to the intercept-shown moment, carrying the capture point and the count of points shown (3).</div>
+          <div class="ac"><span class="acid">BACK-2</span> — back-off at the install-failure capture point (R5 parity) <span class="clar">[Q5: post-state]</span>.</div>
+        </div>
+      </div>
+      <div class="why"><h5>Why it's better</h5><ul>
+        <li><b>Four failure domains, four rows</b> — allocation, emission, feed+timer, measurement. A leaked Genie signal (your G1 invariant) is now reported separately from a missing analytics event.</li>
+        <li><b>"No decline recorded" → domain states</b> — assignment, exclusion, cooldown, standing. The old phrase let a tester pass while a decline-pattern had already reached Enforcement OS.</li>
+        <li><b>"Stays with him" → a definite state + the timer decision</b> (a product choice, not implementation) — which protects MQ-7's timeout metric.</li>
+        <li><b>Honest status</b> — 1a &amp; 1d shippable; 1b, 1c, BACK-2 are OPEN on your rulings, instead of the old row being falsely "Settled".</li>
+      </ul></div>
+    </div>
+
+    <!-- STR-1 -->
+    <div class="cmp">
+      <div class="cmp-head"><span class="id">AC-STR-1</span><span class="flaw">No points / skip (T3)</span><span class="n">correctness fix</span></div>
+      <div class="cmp-body">
+        <div class="col before">
+          <div class="lbl b"><span class="dot"></span>Before</div>
+          <div class="ac"><b>Given</b> Genie returns no nearby points, <b>When</b> he <em style="color:var(--bad)">confirms the decline</em>, <b>Then</b> the decline is recorded, no signal is sent, and he is told the check was skipped.</div>
+        </div>
+        <div class="col after">
+          <div class="lbl a"><span class="dot"></span>After</div>
+          <div class="ac"><span class="acid">STR-1</span> — <b>When</b> the decline is <em>submitted and no points return within the wait</em>, <b>Then</b> the decline is registered for this (booking, CSP), no signal is emitted, and he sees a neutral "check skipped" note — <em>never blocked or left waiting</em>.</div>
+        </div>
+      </div>
+      <div class="why"><h5>Why it's better</h5><ul>
+        <li><b>The When now matches the canon.</b> In T3 there is no confirm step — §3a routes straight from "no points" to a finalised decline. "Confirms" described a screen that doesn't exist; "submitted" is what T3 actually says.</li>
+        <li>Outcomes are domain facts (registered / no signal / neutral note), and it names the shared T3 outcome it holds with FAIL-1 so the two can't drift.</li>
+      </ul></div>
+    </div>
+
+    <!-- WF-1 -->
+    <div class="cmp">
+      <div class="cmp-head"><span class="id">AC-WF-1</span><span class="flaw">Parity across both capture points</span><span class="n">reframed</span></div>
+      <div class="cmp-body">
+        <div class="col before">
+          <div class="lbl b"><span class="dot"></span>Before</div>
+          <div class="ac"><b>Then</b> both emit a signal, and <em style="color:var(--bad)">the only differences recorded are the capture point and the outcome copy</em>.</div>
+        </div>
+        <div class="col after">
+          <div class="lbl a"><span class="dot"></span>After</div>
+          <div class="ac"><span class="acid">WF-1</span> — <b>Then</b> both signals carry <em>the same shown points, in the same order</em>, as rejected; the decline's capture point = <em>decline</em> and the install-failure's = <em>install-failure</em>.</div>
+        </div>
+      </div>
+      <div class="why"><h5>Why it's better</h5><ul>
+        <li><b>No universal diff.</b> "Only differences are…" forces a tester to compare two whole records against a schema that doesn't exist. The rewrite asserts the specific equalities (same points, same order) and the one intended difference — both directly observable.</li>
+      </ul></div>
+    </div>
+
+    <!-- WF-2 -->
+    <div class="cmp">
+      <div class="cmp-head"><span class="id">AC-WF-2</span><span class="flaw">Install-failure confirm outcome</span><span class="n">bound to observable</span></div>
+      <div class="cmp-body">
+        <div class="col before">
+          <div class="lbl b"><span class="dot"></span>Before</div>
+          <div class="ac"><b>Then</b> the failure is recorded and the task is <em style="color:var(--bad)">handed back for re-routing</em> (not shown as "removed").</div>
+        </div>
+        <div class="col after">
+          <div class="lbl a"><span class="dot"></span>After</div>
+          <div class="ac"><span class="acid">WF-2</span> — <b>Then</b> the task <em>stays accepted</em>, no failure strike is recorded against him, the booking <em>re-enters routing (available for re-assignment)</em> rather than removed from him, and the signal's capture point = install-failure. <span class="clar">[Q5]</span></div>
+        </div>
+      </div>
+      <div class="why"><h5>Why it's better</h5><ul>
+        <li><b>"Handed back" → a routing-level observable</b> (re-enters routing / available for re-assignment) that reads differently from the pre-acceptance "removed", so a tester can tell the two paths apart.</li>
+      </ul></div>
+    </div>
+
+    <!-- GRD-1 -->
+    <div class="cmp">
+      <div class="cmp-head"><span class="id">AC-GRD-1</span><span class="flaw">Capture-only guardrail (G4)</span><span class="n">reframed</span></div>
+      <div class="cmp-body">
+        <div class="col before">
+          <div class="lbl b"><span class="dot"></span>Before</div>
+          <div class="ac"><b>When</b> the <em style="color:var(--bad)">signal reaches Genie</em>, <b>Then</b> this feature has taken <em style="color:var(--bad)">no routing or de-listing action itself</em>.</div>
+        </div>
+        <div class="col after">
+          <div class="lbl a"><span class="dot"></span>After</div>
+          <div class="ac"><span class="acid">GRD-1</span> — <b>When</b> the decline is confirmed, <b>Then</b> the feature's <em>only outbound action is the single Genie signal</em> — it issues <em>no routing, assignment, or de-listing call</em>.</div>
+        </div>
+      </div>
+      <div class="why"><h5>Why it's better</h5><ul>
+        <li><b>Real trigger.</b> "Signal reaches Genie" is outside this feature's control; "the decline is confirmed" is an action it owns.</li>
+        <li><b>Bounded negative.</b> "No action anywhere in the system" is untestable; "the feature's only outbound action is the one signal" is observable at the feature's own boundary.</li>
+      </ul></div>
+    </div>
+
+    <!-- FAIL-1 -->
+    <div class="cmp">
+      <div class="cmp-head"><span class="id">AC-FAIL-1</span><span class="flaw">Genie timeout (never block)</span><span class="n">bound to a number</span></div>
+      <div class="cmp-body">
+        <div class="col before">
+          <div class="lbl b"><span class="dot"></span>Before</div>
+          <div class="ac"><b>When</b> Genie's API has not returned points <em style="color:var(--bad)">in time</em>, <b>Then</b> the app lets him complete the decline — <em style="color:var(--bad)">never left spinning</em> — and no signal is sent.</div>
+        </div>
+        <div class="col after">
+          <div class="lbl a"><span class="dot"></span>After</div>
+          <div class="ac"><span class="acid">FAIL-1</span> — <b>When</b> Genie's points do not arrive within the wait <em>W</em> <span class="clar">[Q6: Eng-supplied value]</span>, <b>Then</b> the decline completes without the intercept — <em>never blocked or waiting beyond W</em> — and no signal is emitted.</div>
+        </div>
+      </div>
+      <div class="why"><h5>Why it's better</h5><ul>
+        <li><b>"Spinning" → "waiting beyond W".</b> Correct as written, but not runnable without a number. Referencing the Eng-owned value W keeps §5's "no config" decision intact while making the boundary executable at test time.</li>
+      </ul></div>
+    </div>
+
+    <!-- REG-1 -->
+    <div class="cmp">
+      <div class="cmp-head"><span class="id">AC-REG-1</span><span class="flaw">Regression — other reasons</span><span class="n">tightened</span></div>
+      <div class="cmp-body">
+        <div class="col before">
+          <div class="lbl b"><span class="dot"></span>Before</div>
+          <div class="ac"><b>Given</b> <em style="color:var(--bad)">this feature ships</em>, <b>When</b> a CSP declines for another reason, <b>Then</b> no intercept, no fetch, no signal — and <em style="color:var(--bad)">routing / DAS behave exactly as before</em>.</div>
+        </div>
+        <div class="col after">
+          <div class="lbl a"><span class="dot"></span>After</div>
+          <div class="ac"><span class="acid">REG-1</span> — <b>Given</b> a CSP declines for a reason <em>other than Location is Far</em>, <b>When</b> he submits it, <b>Then</b> <em>no intercept appears, no nearby-points fetch is made, and no signal is emitted</em> — Part 1 capture is the only behaviour.</div>
+        </div>
+      </div>
+      <div class="why"><h5>Why it's better</h5><ul>
+        <li><b>Real Given/When</b> — a state and an action, not "when it ships".</li>
+        <li><b>Keeps the three crisp negatives</b> (the actually-testable part) and drops "behave exactly as before", which is a whole regression suite masquerading as one <em>Then</em>.</li>
+      </ul></div>
+    </div>
+
+    <!-- RACE-1 -->
+    <div class="cmp">
+      <div class="cmp-head"><span class="id">AC-RACE-1</span><span class="flaw">Late points after fallback</span><span class="n">bound to a number</span></div>
+      <div class="cmp-body">
+        <div class="col before">
+          <div class="lbl b"><span class="dot"></span>Before</div>
+          <div class="ac"><b>Given</b> the app already proceeded (T3), <b>When</b> Genie's points arrive <em style="color:var(--bad)">afterwards</em>, <b>Then</b> they are ignored and the decline stands.</div>
+        </div>
+        <div class="col after">
+          <div class="lbl a"><span class="dot"></span>After</div>
+          <div class="ac"><span class="acid">RACE-1</span> — <b>Given</b> the wait <em>W</em> elapsed and the decline is registered (T3), <b>When</b> points arrive <em>after W</em>, <b>Then</b> no intercept appears and the registered decline is unchanged. <span class="clar">[Q6: W]</span></div>
+        </div>
+      </div>
+      <div class="why"><h5>Why it's better</h5><ul>
+        <li><b>"Afterwards" is anchored to W</b> — the same value FAIL-1 uses. Two clean observables (no intercept, decline unchanged). Well-shaped already; this only pins the threshold.</li>
+      </ul></div>
+    </div>
+
+    <!-- DUP-1 -->
+    <div class="cmp">
+      <div class="cmp-head"><span class="id">AC-DUP-1</span><span class="flaw">Double-tap idempotency</span><span class="n">Given/When un-inverted</span></div>
+      <div class="cmp-body">
+        <div class="col before">
+          <div class="lbl b"><span class="dot"></span>Before</div>
+          <div class="ac"><b>Given</b> a decline <em style="color:var(--bad)">already recorded and emitted</em>, <b>When</b> the CSP double-taps, <b>Then</b> exactly one decline and one signal exist.</div>
+        </div>
+        <div class="col after">
+          <div class="lbl a"><span class="dot"></span>After</div>
+          <div class="ac"><span class="acid">DUP-1</span> — <b>Given</b> the intercept is shown with points, <b>When</b> the CSP double-taps "I won't be able to connect", <b>Then</b> <em>exactly one</em> decline is registered and <em>one</em> signal emitted for this booking, and the second tap adds nothing (S4 shown once).</div>
+        </div>
+      </div>
+      <div class="why"><h5>Why it's better</h5><ul>
+        <li><b>Cause and effect restored.</b> The old Given presupposed the outcome ("already recorded") — so the double-tap had nothing to prove. Now the double-tap is the cause and the single record is what must hold.</li>
+        <li>Says what the second tap does (nothing; S4 once) — the old one was silent on it.</li>
+      </ul></div>
+    </div>
+
+  </div>
+</section>
+
+<section id="questions">
+  <div class="wrap">
+    <h2>What the rewrite is waiting on</h2>
+    <p class="sub">Every <span class="clar">[CLARIFY]</span> above maps to one of these. They are product rulings, not writing problems — and most block a real build decision, not just an AC.</p>
+    <div class="qbox">
+      <ol>
+        <li><b>Q1 — "Submit" = the button tap (client-side, before the decline call)?</b> If it means the API call, "no decline recorded" is unbuildable — the decline has already fired and re-routed. <span class="pill">highest risk</span></li>
+        <li><b>Q2 — Are Quality OS / Enforcement OS decline signals in scope for "nothing held against me"?</b> Both receive decline data today; neither is named in the PRD.</li>
+        <li><b>Q3 — The acceptance clock while the modal is open: unchanged, paused, or restarted?</b> Decides whether MQ-7's timeout metric stays clean.</li>
+        <li><b>Q4 — Is "deliberate" a stored attribute or narrative-only?</b> If narrative, CONF-1 asserts it purely through its consequences (points + signal).</li>
+        <li><b>Q5 — Install-failure back-off / confirm post-state?</b> "Stays with him" and "handed back" mean something different post-acceptance.</li>
+        <li><b>Q6 — The Genie wait value W (Eng-owned).</b> FAIL-1 and RACE-1 need a number at test time even though §5 keeps it out of the PRD.</li>
+        <li><b>Q7 — The reason value literal is owned by Part 1 (Reason Set).</b> Named as an input, not embedded here — consistent with "no enums in the PRD".</li>
+      </ol>
+    </div>
+    <div class="note"><b>Reject-with-reason (not adopted):</b> the reviewers wanted the reason enum and the timeout number written into this PRD. Both are deliberate deferrals — resolved by <em>naming the owner</em> (Part 1 · Eng), not by embedding implementation. That keeps your what/why stance intact.</div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>§7 rewrite — evaluation only.</strong> The signed-off PRD is unchanged; this page compares the current ACs with a proposed v1.1 set. Method: two axes (correct · testable), one rule (every <em>Then</em> is an observable domain fact). Prepared for review — Ashish Raj.</p>
+  </div>
+</footer>
+
+<script>
+  (function(){var t=document.getElementById('tg');t.addEventListener('click',function(){var r=document.documentElement,c=r.getAttribute('data-theme');if(!c){c=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';}r.setAttribute('data-theme',c==='dark'?'light':'dark');});})();
+</script>
+</body>
+</html>

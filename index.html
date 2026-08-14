@@ -57,6 +57,18 @@
   .t-bad{background:var(--bad-wash);color:var(--bad)} .t-good{background:var(--good-wash);color:var(--good)}
   .t-warn{background:var(--amber-wash);color:var(--amber)} .t-nn{background:var(--tile);color:var(--muted)}
   .num{text-align:center;font-variant-numeric:tabular-nums}
+  td.sc{text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+  .sc-lo{color:var(--bad)} .sc-mid{color:var(--amber)} .sc-hi{color:var(--good)}
+  .defect{background:var(--surface);border:1px solid var(--tile);border-left:3px solid var(--bad);border-radius:0 11px 11px 0;padding:13px 16px;margin-bottom:11px}
+  .defect .q{font-size:13px;color:var(--ink);background:var(--bad-wash);border-radius:7px;padding:6px 10px;display:inline-block;margin-bottom:6px;font-family:ui-monospace,Consolas,monospace}
+  .defect p{font-size:13.3px;color:var(--ink2)}
+  .defect .who{font-size:11px;font-weight:700;color:var(--bad);letter-spacing:.03em}
+  .fix{background:var(--good-wash);border:1px solid var(--hair);border-left:3px solid var(--good);border-radius:0 11px 11px 0;padding:13px 16px;margin-bottom:11px}
+  .fix .id{font-family:ui-monospace,Consolas,monospace;font-weight:700;color:var(--ink);font-size:12.5px}
+  .fix p{font-size:13.3px;color:var(--ink2);margin-top:4px}
+  .fix em{color:var(--good-ink,var(--good));font-style:normal;font-weight:600}
+  .selfnote{background:var(--sys-wash);border:1px solid var(--hair);border-radius:11px;padding:14px 17px;margin-bottom:20px;font-size:14px;color:var(--ink2)}
+  .selfnote b{color:var(--ink)}
   /* comparison cards */
   .cmp{background:var(--surface);border:1px solid var(--tile);border-radius:14px;padding:0;margin-bottom:20px;overflow:hidden}
   .cmp-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:15px 18px;border-bottom:1px solid var(--line);background:var(--raise)}
@@ -104,6 +116,7 @@
       <span><b>Scope:</b> §7 only — an evaluation, not a PRD change</span>
       <span><b>Status:</b> proposal for a v1.1 amendment</span>
       <span><b>Not applied:</b> the PRD MD/HTML are untouched</span>
+      <span><a href="#secondpass"><b>↓ Second pass:</b> strict QA of the rewrites</a></span>
     </div>
   </div>
 </header>
@@ -391,6 +404,84 @@
       </ol>
     </div>
     <div class="note"><b>Reject-with-reason (not adopted):</b> the reviewers wanted the reason enum and the timeout number written into this PRD. Both are deliberate deferrals — resolved by <em>naming the owner</em> (Part 1 · Eng), not by embedding implementation. That keeps your what/why stance intact.</div>
+  </div>
+</section>
+
+<section id="secondpass">
+  <div class="wrap">
+    <span class="eyebrow">Second pass · adversarial QA of the rewrites</span>
+    <h2 style="margin-top:10px">Do the new ACs actually hold up?</h2>
+    <p class="sub">The same strict rubric — Testable · Unambiguous · Atomic · Measurable · Solution-agnostic · Complete (1–5) — turned back on the rewritten set. Verdict up front: <b>the rewrite closed the big holes</b> (correctness, the worst observability offenders), <b>but a strict re-read finds a next layer</b> — a few rows still bundle 3–4 claims, I introduced some new soft terms, and two blockers remain unresolved (the signal's observable form; the timeout number). Being honest about this is the point: one pass is never enough.</p>
+    <div class="selfnote"><b>4 of 16 are Ready</b> (CONF-1b, CONF-2, BACK-1d, DUP-1). The rest need a second tightening, and BACK-2 is still a stub. That's a real improvement over the original set (where the best-scored row, AC-CONF-2, was the <em>only</em> shippable one) — but not "done".</div>
+
+    <h3 style="margin:22px 0 8px">A. Scorecard</h3>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>New AC</th><th class="num">Test</th><th class="num">Unamb</th><th class="num">Atom</th><th class="num">Meas</th><th class="num">Soln-ag</th><th class="num">Compl</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td><b>CONF-1a</b></td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-mid">3</td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td><span class="tag t-warn">needs work</span></td></tr>
+          <tr><td><b>CONF-1b</b></td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td><span class="tag t-good">ready</span></td></tr>
+          <tr><td><b>CONF-1c</b></td><td class="sc sc-mid">3</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td><span class="tag t-warn">needs work</span></td></tr>
+          <tr><td><b>CONF-2</b></td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td><span class="tag t-good">ready</span></td></tr>
+          <tr><td><b>BACK-1a</b></td><td class="sc sc-mid">3</td><td class="sc sc-mid">3</td><td class="sc sc-mid">3</td><td class="sc sc-lo">2</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td><span class="tag t-warn">needs work</span></td></tr>
+          <tr><td><b>BACK-1b</b></td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-mid">3</td><td class="sc sc-hi">5</td><td class="sc sc-mid">3</td><td><span class="tag t-warn">needs work</span></td></tr>
+          <tr><td><b>BACK-1c</b></td><td class="sc sc-mid">3</td><td class="sc sc-mid">3</td><td class="sc sc-mid">3</td><td class="sc sc-lo">2</td><td class="sc sc-hi">5</td><td class="sc sc-mid">3</td><td><span class="tag t-warn">needs work</span></td></tr>
+          <tr><td><b>BACK-1d</b></td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td><span class="tag t-good">ready*</span></td></tr>
+          <tr><td><b>BACK-2</b></td><td class="sc sc-lo">1</td><td class="sc sc-lo">1</td><td class="sc sc-lo">1</td><td class="sc sc-lo">1</td><td class="sc sc-mid">3</td><td class="sc sc-lo">1</td><td><span class="tag t-bad">stub</span></td></tr>
+          <tr><td><b>STR-1</b></td><td class="sc sc-mid">3</td><td class="sc sc-mid">3</td><td class="sc sc-lo">2</td><td class="sc sc-lo">2</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td><span class="tag t-warn">needs work</span></td></tr>
+          <tr><td><b>WF-1</b></td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-mid">3</td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td><span class="tag t-warn">needs work</span></td></tr>
+          <tr><td><b>WF-2</b></td><td class="sc sc-mid">3</td><td class="sc sc-mid">3</td><td class="sc sc-lo">2</td><td class="sc sc-lo">2</td><td class="sc sc-hi">4</td><td class="sc sc-mid">3</td><td><span class="tag t-warn">needs work</span></td></tr>
+          <tr><td><b>GRD-1</b></td><td class="sc sc-mid">3</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-mid">3</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td><span class="tag t-warn">needs work</span></td></tr>
+          <tr><td><b>FAIL-1</b></td><td class="sc sc-mid">3</td><td class="sc sc-hi">4</td><td class="sc sc-mid">3</td><td class="sc sc-mid">3</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td><span class="tag t-warn">needs work</span></td></tr>
+          <tr><td><b>REG-1</b></td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-mid">3</td><td class="sc sc-mid">3</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td><span class="tag t-warn">needs work</span></td></tr>
+          <tr><td><b>RACE-1</b></td><td class="sc sc-mid">3</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td class="sc sc-mid">3</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td><span class="tag t-warn">needs work</span></td></tr>
+          <tr><td><b>DUP-1</b></td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td><span class="tag t-good">ready</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:9px">* BACK-1d is Ready once its correlation key (booking id) is named explicitly. BACK-2 is a placeholder, not an AC — it scores as incomplete by design.</p>
+
+    <h3 style="margin:26px 0 10px">B. Specific defects (quoted)</h3>
+
+    <div class="defect"><span class="who">Residual bundle</span><div class="q">STR-1 · "the decline is registered … no signal is emitted … a neutral note … never blocked or left waiting"</div><p>Four claims in one row — the exact thing I split BACK-1 to avoid. Same in <b>FAIL-1</b> (completes + never-blocked + no-signal) and <b>WF-2</b> (accepted + no strike + re-enters routing + capture point). These must split like BACK-1 did.</p></div>
+
+    <div class="defect"><span class="who">New vague term I introduced</span><div class="q">BACK-1a · "nothing that would … count against his <em>standing</em>"</div><p>"Standing" is undefined — a tester can't enumerate what counts. I traded "no decline recorded" for a cleaner phrase but left one soft word. Fix by naming the exact set (no decline-exit, no cooldown, no assignment-count change) — <span class="clar">[code-verify the set — this is the reviewer's D1 list]</span>.</p></div>
+
+    <div class="defect"><span class="who">New vague term</span><div class="q">BACK-1c · "present and <em>actionable</em> in his feed"</div><p>"Actionable" reads two ways. Say what he can do: "still in his feed and he can still accept it."</p></div>
+
+    <div class="defect"><span class="who">New vague term</span><div class="q">WF-2 · "no failure <em>strike</em> is recorded against him"</div><p>"Strike" isn't a defined entity. Replace with the domain fact: "no decline-exit or cooldown is applied to him."</p></div>
+
+    <div class="defect"><span class="who">Still a boundary, not an AC</span><div class="q">GRD-1 · "the feature's <em>only outbound action</em> is the single Genie signal"</div><p>Better than "no action anywhere", but "only outbound action" is still a universal negative over the feature's whole surface. Assert the specific negatives instead: "issues no re-route, no re-assignment, and no de-listing call."</p></div>
+
+    <div class="defect"><span class="who">Unresolved blocker — carried, not fixed</span><div class="q">CONF-1c · CONF-2 · BACK-1b · "a signal is emitted to Genie carrying {…}"</div><p>I named the <em>fields</em>, but not the <em>observable handle</em> — where a tester inspects the emitted signal. This is the reviewers' 9-of-11 blocker, and the rewrite doesn't close it; it just makes it visible. Resolution is a citation, not a redesign: verified at Genie's receive boundary, per the signed-off <a href="https://ashish-raj-wiom.github.io/genie-coverage-integration-prd/">Genie PRD</a>.</p></div>
+
+    <div class="defect"><span class="who">Missing number — carried</span><div class="q">STR-1 · FAIL-1 · RACE-1 · "within the wait" / "beyond W" / "after W"</div><p>W is referenced but has no value (Q6). Correct shape, unrunnable until Eng supplies the number at test time. Not a defect in the PRD (§5 keeps it out by design) — a defect in calling these ACs "executable" today.</p></div>
+
+    <div class="defect"><span class="who">Mild bundle</span><div class="q">CONF-1a · "the booking is removed from him <em>and</em> a decline … is registered"</div><p>Two facts (UI removal + the decline record). Split cleanly — removal is CONF-1b's territory, the record is its own.</p></div>
+
+    <h3 style="margin:26px 0 10px">C. Open questions — ranked by risk</h3>
+    <div class="qbox">
+      <ol>
+        <li><b>The Genie signal's observable form.</b> Where does a tester inspect the emitted signal — the Genie receive boundary, an event log? Blocks 9 of the 16. <span class="pill">highest</span> <span class="pill">new</span></li>
+        <li><b>The exact "adverse-consequence" set for a back-off / decline</b> (BACK-1a). Enumerate what must NOT be applied — decline-exit, cooldown, assignment-count, decline-pattern to Quality/Enforcement — and code-verify it (D1).</li>
+        <li><b>Q1 — "submit" = the button tap (pre-call)?</b> Still the story-level risk.</li>
+        <li><b>Q6 — the wait value W</b> for STR-1 / FAIL-1 / RACE-1.</li>
+        <li><b>Q2 / Q3 / Q5</b> — downstream scope, acceptance-clock behaviour, install-failure post-state (unchanged from the first pass).</li>
+        <li><b>Definitions</b> of "standing" and "strike" — or drop both for enumerated domain facts.</li>
+      </ol>
+    </div>
+
+    <h3 style="margin:26px 0 10px">D. The next tightening (weak criteria, re-rewritten)</h3>
+    <p class="sub">Intent preserved, nothing invented; unknowns still marked.</p>
+
+    <div class="fix"><span class="id">BACK-1a →</span><p>Then the booking <em>remains assigned to the same CSP</em>, and for this (booking, CSP) <em>no decline-exit, no cooldown, and no assignment-count change</em> is applied <span class="clar">[code-verify this is the full set — D1]</span>.</p></div>
+    <div class="fix"><span class="id">BACK-1c →</span><p>Then the booking is <em>still in his feed and he can still accept it</em>; the acceptance window is <span class="clar">[Q3: unchanged / paused]</span>.</p></div>
+    <div class="fix"><span class="id">STR-1 → split</span><p><b>STR-1a</b> — Then the decline is registered for this (booking, CSP) and <em>no signal is emitted</em>. &nbsp; <b>STR-1b</b> — Then he sees a neutral "check skipped" note and the decline completes <em>within W</em>, never blocked <span class="clar">[Q6: W]</span>.</p></div>
+    <div class="fix"><span class="id">FAIL-1 → split</span><p>Same two-way split as STR-1 (registered + no-signal · completes-within-W + never-blocked); the two share the T3 outcome and must reference it, not restate it.</p></div>
+    <div class="fix"><span class="id">WF-2 → split &amp; de-vague</span><p><b>WF-2a</b> — the task <em>stays accepted</em> and <em>no decline-exit or cooldown</em> is applied to him. &nbsp; <b>WF-2b</b> — the booking <em>re-enters routing (available for re-assignment)</em>. &nbsp; <b>WF-2c</b> — the signal's capture point = install-failure. <span class="clar">[Q5]</span></p></div>
+    <div class="fix"><span class="id">GRD-1 → specific negatives</span><p>Then the feature issues <em>no re-route call, no re-assignment, and no de-listing call</em> — its only outbound effect is the one Genie signal.</p></div>
+    <div class="fix"><span class="id">CONF-1a → split</span><p>Keep the decline record here (<em>registered carrying the 3 ordered points</em>); move "booking removed from his feed" into CONF-1b with the S4 confirmation.</p></div>
+    <div class="fix"><span class="id">CONF-1c / CONF-2 / BACK-1b → add the handle</span><p>… <em>verifiable at Genie's receive boundary (per the Genie PRD)</em> — the observable a tester binds to, without this PRD specifying transport.</p></div>
   </div>
 </section>
 

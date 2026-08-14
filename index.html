@@ -572,6 +572,32 @@
       </table>
     </div>
     <div class="selfnote"><b>Where it lands:</b> with these five in, <b>every AC is Ready</b> — this supersedes the third-pass tally. The one non-decision that remains — the signal's observable handle — is a cross-reference, not an input: a tester inspects the emitted signal at <b>Genie's receive boundary</b>, per the signed-off <a href="https://ashish-raj-wiom.github.io/genie-coverage-integration-prd/">Genie PRD</a>. The reason value stays owned by <b>Part 1</b>. <b>Nothing further is needed from you.</b> Full final text below.</div>
+
+    <h3 style="margin:26px 0 8px">Re-scored against the rubric</h3>
+    <p class="sub">The strict QA run on the final set. The rulings closed every unknown, so 13 of 15 land Ready immediately; the two that didn't were a readability-vs-atomicity trade — now split and de-vagued (reflected in the appendix), so the whole set is Ready.</p>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>AC (final)</th><th class="num">Test</th><th class="num">Unamb</th><th class="num">Atom</th><th class="num">Meas</th><th class="num">Soln-ag</th><th class="num">Compl</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td><b>CONF-1a</b></td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td><span class="tag t-good">ready</span></td></tr>
+          <tr><td><b>CONF-1b</b></td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td><span class="tag t-good">ready</span></td></tr>
+          <tr><td><b>CONF-1c</b></td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td><span class="tag t-good">ready</span></td></tr>
+          <tr><td><b>CONF-2</b></td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td><span class="tag t-good">ready</span></td></tr>
+          <tr><td><b>BACK-1a</b></td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td><span class="tag t-good">ready</span></td></tr>
+          <tr><td><b>BACK-1b</b></td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td><span class="tag t-good">ready</span></td></tr>
+          <tr><td><b>BACK-1c</b></td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td><span class="tag t-good">ready</span></td></tr>
+          <tr><td><b>BACK-2</b></td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td><span class="tag t-good">ready</span></td></tr>
+          <tr><td><b>STR-1/FAIL-1</b> <span class="pill">was: needs work → split</span></td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-mid">3</td><td class="sc sc-mid">3</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td><span class="tag t-warn">→ split into T3-a / T3-b</span></td></tr>
+          <tr><td><b>WF-1</b></td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-mid">3</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td><span class="tag t-good">ready</span></td></tr>
+          <tr><td><b>WF-2</b> <span class="pill">was: needs work → split + de-vague</span></td><td class="sc sc-hi">4</td><td class="sc sc-mid">3</td><td class="sc sc-lo">2</td><td class="sc sc-mid">3</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td><span class="tag t-warn">→ WF-2a/b/c, "strike" removed</span></td></tr>
+          <tr><td><b>GRD-1</b></td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td><span class="tag t-good">ready</span></td></tr>
+          <tr><td><b>REG-1</b></td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td><span class="tag t-good">ready</span></td></tr>
+          <tr><td><b>RACE-1</b></td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td><span class="tag t-good">ready</span></td></tr>
+          <tr><td><b>DUP-1</b></td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">4</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td class="sc sc-hi">5</td><td><span class="tag t-good">ready</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:9px"><b>Run result:</b> 13 ready · 2 needs-work — both structural (bundling), not unknowns. <b>Fix applied:</b> STR/FAIL → <b>T3-a</b> (record + no signal) &amp; <b>T3-b</b> (UX); WF-2 → <b>WF-2a/b/c</b> with "no failure <em>strike</em>" replaced by "no decline-exit or cooldown". After the split, the set is <b>all Ready</b> — no open questions.</p>
   </div>
 </section>
 
@@ -607,9 +633,10 @@
         <div class="ac"><span class="acid">BACK-1b</span> Then <em>nothing is emitted anywhere</em> — no Genie signal, no decline-pattern — because no decline occurred.</div>
         <div class="ac"><span class="acid">BACK-1c</span> Then only the reconsideration is <em>logged for measurement</em> — exactly one back-off outcome, correlated by booking id to the intercept-shown, carrying the count of points shown (3).</div>
         <div class="ac"><span class="acid">BACK-2</span> When he reconsiders at the <em>install-failure</em> capture point, Then no install-failure is reported — the task stays accepted, only the reconsideration is logged.</div>
-        <div class="ac"><span class="acid">STR-1 / FAIL-1</span> When the CSP <em>declines</em> and Genie returns <em>no nearby points</em> (none exist, or its API doesn't respond), Then the decline is registered, <em>no signal is emitted</em>, and he sees a neutral "check skipped" note — never blocked.</div>
+        <div class="ac"><span class="acid">STR-1/FAIL-1</span> (cause) When the CSP <em>declines</em> and Genie returns <em>no nearby points</em> (none exist, or its API doesn't respond), Then the flow proceeds without the intercept (→ T3-a / T3-b).</div>
+        <div class="ac"><span class="acid">T3-a</span> Then the decline is <em>registered</em> and <em>no signal is emitted</em> (no points shown → no informed decision). &nbsp; <span class="acid">T3-b</span> Then he sees a neutral "check skipped" note and is <em>never blocked</em>.</div>
         <div class="ac"><span class="acid">WF-1</span> Both signals carry the <em>same points, same order</em>; capture points differ (decline vs install-failure).</div>
-        <div class="ac"><span class="acid">WF-2</span> (install-failure decline) task <em>stays accepted</em>, <em>no failure strike</em>, booking <em>re-enters routing (available for re-assignment)</em>; signal capture point = install-failure.</div>
+        <div class="ac"><span class="acid">WF-2a</span> (install-failure decline) task <em>stays accepted</em>, and <em>no decline-exit or cooldown</em> is applied to him. &nbsp; <span class="acid">WF-2b</span> the booking <em>re-enters routing (available for re-assignment)</em>. &nbsp; <span class="acid">WF-2c</span> the signal's capture point = install-failure.</div>
         <div class="ac"><span class="acid">GRD-1</span> When the CSP declines, Then the feature issues <em>no re-route, no re-assignment, no de-listing call</em> — its only outbound effect is the one signal.</div>
         <div class="ac"><span class="acid">REG-1</span> Given a decline for a reason <em>other than</em> Location is Far, Then <em>no intercept, no fetch, no signal</em> — Part 1 capture is the only behaviour.</div>
         <div class="ac"><span class="acid">RACE-1</span> Given the flow already proceeded without the intercept and the decline is registered, When Genie's points arrive later, Then they are <em>ignored</em> — no intercept, the decline unchanged.</div>

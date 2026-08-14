@@ -117,6 +117,7 @@
       <span><b>Status:</b> proposal for a v1.1 amendment</span>
       <span><b>Not applied:</b> the PRD MD/HTML are untouched</span>
       <span><a href="#secondpass"><b>↓ Second pass:</b> strict QA of the rewrites</a></span>
+      <span><a href="#thirdpass"><b>↓ Third pass:</b> after tightening + re-score</a></span>
     </div>
   </div>
 </header>
@@ -482,6 +483,72 @@
     <div class="fix"><span class="id">GRD-1 → specific negatives</span><p>Then the feature issues <em>no re-route call, no re-assignment, and no de-listing call</em> — its only outbound effect is the one Genie signal.</p></div>
     <div class="fix"><span class="id">CONF-1a → split</span><p>Keep the decline record here (<em>registered carrying the 3 ordered points</em>); move "booking removed from his feed" into CONF-1b with the S4 confirmation.</p></div>
     <div class="fix"><span class="id">CONF-1c / CONF-2 / BACK-1b → add the handle</span><p>… <em>verifiable at Genie's receive boundary (per the Genie PRD)</em> — the observable a tester binds to, without this PRD specifying transport.</p></div>
+  </div>
+</section>
+
+<section id="thirdpass">
+  <div class="wrap">
+    <span class="eyebrow">Third pass · after the tightening, re-scored</span>
+    <h2 style="margin-top:10px">Where it converges</h2>
+    <p class="sub">The second-pass fixes applied — bundles split, "standing / actionable / strike / only outbound action" replaced with enumerated domain facts, the Genie-boundary handle cited, and the two-cause T3 outcome factored so STR-1 and FAIL-1 can't drift. Re-running the rubric, the picture changes shape: <b>almost nothing is a writing defect anymore.</b> What's left is <b>input you owe</b> — a ruling, a value, or one code check — which no amount of rewriting can close.</p>
+
+    <div class="selfnote">
+      <b>Convergence.</b> Signed-off set → <b>1</b> shippable (CONF-2 only). &nbsp;First rewrite → <b>4</b> Ready, 12 needs-work. &nbsp;After this tightening → <b>15</b> Ready or Ready-pending-input, <b>1</b> genuinely blocked (BACK-2, un-writable until Q5). The writing quality has converged; the residue is <b>6 external inputs</b>, not prose.
+    </div>
+
+    <p style="font-size:12.5px;color:var(--ink2);margin:16px 0 10px"><b>Verdict legend:</b> &nbsp;<span class="tag t-good">ready</span> writing done, executable once the reason value &amp; signal handle are bound &nbsp; · &nbsp; <span class="tag t-warn">ready · pending input</span> prose is complete, blocked only on a named ruling/value &nbsp; · &nbsp; <span class="tag t-bad">blocked</span> can't be written until the PM rules</p>
+
+    <h3 style="margin:22px 0 10px">A. Re-scored — the tightened set</h3>
+    <div class="twrap">
+      <table>
+        <thead><tr><th>AC (v3)</th><th>What it asserts (observable)</th><th>Verdict</th><th>Waiting on</th></tr></thead>
+        <tbody>
+          <tr><td><b>CONF-1a</b></td><td>decline registered carrying the 3 points, in order</td><td><span class="tag t-good">ready</span></td><td>Q1 (Given)</td></tr>
+          <tr><td><b>CONF-1b</b></td><td>booking removed from his feed + S4 confirmation shown</td><td><span class="tag t-good">ready</span></td><td>—</td></tr>
+          <tr><td><b>CONF-1c</b></td><td>signal carries {ids, CSP, capture pt, reason, 3 ordered points}, at Genie's receive boundary</td><td><span class="tag t-good">ready</span></td><td>signal handle</td></tr>
+          <tr><td><b>CONF-2</b></td><td>shown 3 of Genie's 5 → signal carries exactly those 3, none of the 2</td><td><span class="tag t-good">ready</span></td><td>—</td></tr>
+          <tr><td><b>BACK-1a</b></td><td>stays assigned; no decline-exit, no cooldown, no assignment-count change</td><td><span class="tag t-warn">ready · pending input</span></td><td>code-verify the set</td></tr>
+          <tr><td><b>BACK-1b</b></td><td>no signal to Genie</td><td><span class="tag t-warn">ready · pending input</span></td><td>Q2 (downstream)</td></tr>
+          <tr><td><b>BACK-1c</b></td><td>still in feed &amp; can accept; acceptance window …</td><td><span class="tag t-warn">ready · pending input</span></td><td>Q3 (clock)</td></tr>
+          <tr><td><b>BACK-1d</b></td><td>exactly one back-off outcome, correlated by booking id to intercept-shown, carries capture pt + count 3</td><td><span class="tag t-good">ready</span></td><td>—</td></tr>
+          <tr><td><b>BACK-2</b></td><td>back-off at install-failure — post-state</td><td><span class="tag t-bad">blocked</span></td><td>Q5 (post-state)</td></tr>
+          <tr><td><b>T3-REC</b></td><td>decline registered for (booking, CSP)</td><td><span class="tag t-good">ready</span></td><td>—</td></tr>
+          <tr><td><b>T3-SIG</b></td><td>no signal emitted</td><td><span class="tag t-good">ready</span></td><td>—</td></tr>
+          <tr><td><b>T3-UX</b></td><td>neutral "check skipped" note; never blocked/waiting beyond W</td><td><span class="tag t-warn">ready · pending input</span></td><td>Q6 (W)</td></tr>
+          <tr><td><b>STR-1</b></td><td>cause: no points → routes to T3</td><td><span class="tag t-good">ready</span></td><td>—</td></tr>
+          <tr><td><b>FAIL-1</b></td><td>cause: no points within W → routes to T3</td><td><span class="tag t-warn">ready · pending input</span></td><td>Q6 (W)</td></tr>
+          <tr><td><b>WF-1</b></td><td>both signals carry same points/order; capture pts differ (decline vs install-failure)</td><td><span class="tag t-good">ready</span></td><td>—</td></tr>
+          <tr><td><b>WF-2a</b></td><td>task stays accepted; no decline-exit or cooldown</td><td><span class="tag t-good">ready</span></td><td>—</td></tr>
+          <tr><td><b>WF-2b</b></td><td>booking re-enters routing (available for re-assignment)</td><td><span class="tag t-warn">ready · pending input</span></td><td>Q5 (confirm)</td></tr>
+          <tr><td><b>WF-2c</b></td><td>signal capture point = install-failure</td><td><span class="tag t-good">ready</span></td><td>—</td></tr>
+          <tr><td><b>GRD-1</b></td><td>feature issues no re-route, no re-assignment, no de-listing call</td><td><span class="tag t-good">ready</span></td><td>—</td></tr>
+          <tr><td><b>REG-1</b></td><td>other reason → no intercept, no fetch, no signal</td><td><span class="tag t-good">ready</span></td><td>—</td></tr>
+          <tr><td><b>RACE-1</b></td><td>points after W → no intercept, registered decline unchanged</td><td><span class="tag t-warn">ready · pending input</span></td><td>Q6 (W)</td></tr>
+          <tr><td><b>DUP-1</b></td><td>double-tap → exactly one decline + one signal; 2nd tap adds nothing</td><td><span class="tag t-good">ready</span></td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:9px">13 <span class="tag t-good">ready</span> · 7 <span class="tag t-warn">pending input</span> · 1 <span class="tag t-bad">blocked</span>. Every "pending input" is a named ruling/value, not a prose fix.</p>
+
+    <h3 style="margin:26px 0 10px">B. Remaining defects — genuinely few now</h3>
+    <div class="defect"><span class="who">Un-writable until a ruling</span><div class="q">BACK-2 · back-off / confirm at the install-failure capture point</div><p>The <em>Then</em> can't be written without the post-acceptance post-state (Q5). This is correct behaviour for an AC — it should stay <b>blocked</b>, not be filled with a guess.</p></div>
+    <div class="defect"><span class="who">Inherent "both" (accepted)</span><div class="q">WF-1 · "both signals carry the same points…"</div><p>A parity AC compares two runs, so a "both" is intrinsic — this is a workflow AC by design, not a hidden bundle. Left as-is.</p></div>
+    <div class="defect"><span class="who">Structural, not vague</span><div class="q">STR-1 / FAIL-1 · "routes to T3"</div><p>These are now pure <em>cause</em> ACs pointing at the shared T3-REC/SIG/UX outcome — the factoring the first review asked for. The slight indirection is deliberate: it stops the two paths drifting.</p></div>
+
+    <h3 style="margin:26px 0 10px">C. The whole residue — 6 inputs, and it's done</h3>
+    <div class="qbox">
+      <ol>
+        <li><b>Signal observable handle</b> — confirm the Genie receive boundary (Genie PRD) is where a tester inspects the emitted signal. Unblocks CONF-1c, CONF-2.</li>
+        <li><b>Adverse-consequence set</b> — code-verify BACK-1a's list (decline-exit, cooldown, assignment-count; and whether a decline-pattern to Quality/Enforcement belongs).</li>
+        <li><b>Q1</b> — "submit" = the button tap, pre-call.</li>
+        <li><b>Q6</b> — the wait value W (Eng, at test time) → T3-UX, FAIL-1, RACE-1.</li>
+        <li><b>Q2 / Q3</b> — downstream scope; acceptance-clock behaviour.</li>
+        <li><b>Q5</b> — install-failure post-state → unblocks BACK-2, confirms WF-2b.</li>
+      </ol>
+    </div>
+
+    <h3 style="margin:26px 0 10px">D. Nothing left to rewrite</h3>
+    <p class="sub" style="margin-bottom:0">This is the point of the exercise. Three passes drove the <b>writing</b> to done — atomic, observable, correct Given/When, marked unknowns. The "definition of done" for §7 is no longer a prose task; it's <b>answering the six inputs above</b>. Once you rule on those, this set is executable as written, and it's a real v1.1 upgrade over the signed-off ACs.</p>
   </div>
 </section>
 

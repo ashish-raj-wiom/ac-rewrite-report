@@ -118,6 +118,7 @@
       <span><b>Not applied:</b> the PRD MD/HTML are untouched</span>
       <span><a href="#secondpass"><b>↓ Second pass:</b> strict QA of the rewrites</a></span>
       <span><a href="#thirdpass"><b>↓ Third pass:</b> after tightening + re-score</a></span>
+      <span><a href="#appendix"><b>↓ Appendix:</b> full AC text — original vs v3</a></span>
     </div>
   </div>
 </header>
@@ -549,6 +550,52 @@
 
     <h3 style="margin:26px 0 10px">D. Nothing left to rewrite</h3>
     <p class="sub" style="margin-bottom:0">This is the point of the exercise. Three passes drove the <b>writing</b> to done — atomic, observable, correct Given/When, marked unknowns. The "definition of done" for §7 is no longer a prose task; it's <b>answering the six inputs above</b>. Once you rule on those, this set is executable as written, and it's a real v1.1 upgrade over the signed-off ACs.</p>
+  </div>
+</section>
+
+<section id="appendix">
+  <div class="wrap">
+    <span class="eyebrow">Appendix · full text</span>
+    <h2 style="margin-top:10px">Every AC in full — original vs v3</h2>
+    <p class="sub">The signed-off §7 (11 ACs) and the tightened v3 draft (22), verbatim. <span style="color:var(--bad)">Red</span> = the narrative verbs the rewrite removed; <span style="color:var(--good)">green</span> = the observable it became; <span class="clar">amber</span> = a marked unknown.</p>
+
+    <div class="cmp-body" style="border:1px solid var(--tile);border-radius:14px;overflow:hidden">
+      <div class="col before">
+        <div class="lbl b"><span class="dot"></span>Original §7 — signed off (11)</div>
+        <div class="ac"><span class="acid">CONF-1</span> Given a CSP shown <b>3</b> of his active connections in range, When he taps "I won't be able to connect", Then the decline is <em style="color:var(--bad)">recorded as deliberate</em>, the booking is removed + confirmation (S4), and a signal is pushed carrying the ids, the CSP, that it was a decline, and the 3 points in order.</div>
+        <div class="ac"><span class="acid">CONF-2</span> Given the same confirm, When the signal is emitted, Then it names only the points that were shown — no point not shown ever appears.</div>
+        <div class="ac"><span class="acid">BACK-1</span> Given a CSP shown his nearby connections, When he taps "OK, I'll connect", Then <em style="color:var(--bad)">no decline is recorded</em> and no signal is sent, the <em style="color:var(--bad)">booking stays with him</em>, and the back-off event is <em style="color:var(--bad)">captured for measurement</em>.</div>
+        <div class="ac"><span class="acid">STR-1</span> Given Genie returns no points, When he <em style="color:var(--bad)">confirms the decline</em>, Then the decline is recorded, no signal sent, and he is told the check was skipped.</div>
+        <div class="ac"><span class="acid">WF-1</span> Given the same points, When one CSP declines and another install-fails, Then both see the intercept and both emit — <em style="color:var(--bad)">the only differences recorded are</em> the capture point and outcome copy.</div>
+        <div class="ac"><span class="acid">WF-2</span> Given an install-failure with the reason + connections shown, When he taps "I won't be able to connect", Then the failure is recorded and the task is <em style="color:var(--bad)">handed back for re-routing</em> (not "removed"), signal capture point = install-failure.</div>
+        <div class="ac"><span class="acid">GRD-1</span> Given a confirmed decline, When the <em style="color:var(--bad)">signal reaches Genie</em>, Then this feature has taken <em style="color:var(--bad)">no routing or de-listing action itself</em>.</div>
+        <div class="ac"><span class="acid">FAIL-1</span> Given a CSP selects the reason, When Genie hasn't returned points <em style="color:var(--bad)">in time</em>, Then he completes the decline — <em style="color:var(--bad)">never left spinning</em> — and no signal is sent.</div>
+        <div class="ac"><span class="acid">REG-1</span> Given <em style="color:var(--bad)">this feature ships</em>, When a CSP declines for another reason, Then no intercept/fetch/signal — and <em style="color:var(--bad)">routing / DAS behave exactly as before</em>.</div>
+        <div class="ac"><span class="acid">RACE-1</span> Given the app already proceeded (T3), When points arrive <em style="color:var(--bad)">afterwards</em>, Then they are ignored — the decline stands, no intercept retro-shown.</div>
+        <div class="ac"><span class="acid">DUP-1</span> Given a decline <em style="color:var(--bad)">already recorded and emitted</em>, When the CSP double-taps, Then exactly one decline and one signal exist.</div>
+      </div>
+      <div class="col after">
+        <div class="lbl a"><span class="dot"></span>v3 — after pass 2 (22)</div>
+        <div class="ac" style="border-left-color:var(--sys-ink);background:var(--sys-wash)"><b>Shared Given (T1 &amp; T2):</b> booking in the pre-acceptance state · Genie returns 3 points · "Location is Far" selected (value owned by Part 1) · intercept (S1) showing the 3 · decline not yet sent to allocation <span class="clar">[Q1: submit = tap]</span>.</div>
+        <div class="ac"><span class="acid">CONF-1a</span> Then a decline for this (booking, CSP) is <em>registered carrying the 3 points shown, in order</em>, as rejected.</div>
+        <div class="ac"><span class="acid">CONF-1b</span> Then the booking is <em>removed from his feed</em> and he sees the S4 confirmation with his reason.</div>
+        <div class="ac"><span class="acid">CONF-1c</span> Then a signal is emitted carrying <em>{connection id, customer id, CSP, capture point = decline, reason, 3 points in order}</em>, verifiable at Genie's receive boundary (Genie PRD).</div>
+        <div class="ac"><span class="acid">CONF-2</span> Given the intercept showed <em>3 while Genie returned 5</em>, Then the signal carries <em>exactly those 3, none of the 2</em> not shown.</div>
+        <div class="ac"><span class="acid">BACK-1a</span> Then the booking <em>remains assigned to the same CSP</em>, and <em>no decline-exit, no cooldown, no assignment-count change</em> is applied <span class="clar">[code-verify set]</span>.</div>
+        <div class="ac"><span class="acid">BACK-1b</span> Then <em>no signal is emitted</em> <span class="clar">[Q2: nor decline-pattern to Quality/Enforcement, if in scope]</span>.</div>
+        <div class="ac"><span class="acid">BACK-1c</span> Then the booking is <em>still in his feed and he can still accept it</em>; the acceptance window is <span class="clar">[Q3: unchanged / paused]</span>.</div>
+        <div class="ac"><span class="acid">BACK-1d</span> Then <em>exactly one</em> back-off outcome is recorded, <em>correlated by booking id</em> to the intercept-shown moment, carrying the capture point + count of points shown (3).</div>
+        <div class="ac"><span class="acid">BACK-2</span> Given the same at the install-failure capture point, When he taps "OK, I'll connect", Then <span class="clar">[Q5: post-state]</span> and no signal is emitted. <b style="color:var(--bad)">(blocked)</b></div>
+        <div class="ac"><span class="acid">T3-REC</span> a T3 decline is <em>registered</em> for (booking, CSP). &nbsp; <span class="acid">T3-SIG</span> <em>no signal</em> is emitted. &nbsp; <span class="acid">T3-UX</span> neutral "check skipped" note; <em>never blocked or waiting beyond W</em> <span class="clar">[Q6: W]</span>.</div>
+        <div class="ac"><span class="acid">STR-1</span> (cause) Given no points returned, When submitted, Then routes to T3. &nbsp; <span class="acid">FAIL-1</span> (cause) Given points don't arrive within W, When W elapses, Then routes to T3. <span class="clar">[Q6]</span></div>
+        <div class="ac"><span class="acid">WF-1</span> Both signals carry the <em>same points, same order</em>; capture points differ (decline vs install-failure).</div>
+        <div class="ac"><span class="acid">WF-2a</span> task <em>stays accepted</em>, <em>no decline-exit or cooldown</em>. &nbsp; <span class="acid">WF-2b</span> booking <em>re-enters routing (available for re-assignment)</em> <span class="clar">[Q5]</span>. &nbsp; <span class="acid">WF-2c</span> signal capture point = install-failure.</div>
+        <div class="ac"><span class="acid">GRD-1</span> When confirmed, Then the feature issues <em>no re-route, no re-assignment, no de-listing call</em> — its only outbound effect is the one signal.</div>
+        <div class="ac"><span class="acid">REG-1</span> Given a decline for a reason <em>other than</em> Location is Far, When submitted, Then <em>no intercept, no fetch, no signal</em> — Part 1 capture is the only behaviour.</div>
+        <div class="ac"><span class="acid">RACE-1</span> Given W elapsed and the decline registered, When points arrive <em>after W</em>, Then no intercept and the registered decline <em>unchanged</em> <span class="clar">[Q6]</span>.</div>
+        <div class="ac"><span class="acid">DUP-1</span> Given the <em>intercept is shown</em>, When he double-taps, Then <em>exactly one</em> decline + <em>one</em> signal; the second tap adds nothing (S4 once).</div>
+      </div>
+    </div>
   </div>
 </section>
 
